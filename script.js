@@ -44,7 +44,10 @@ function addRow(row, statsTable) {
     const cell3 = newRow.insertCell(2);
     
     // Core formula stays visible
-    cell3.appendChild(document.createTextNode(row.formula)); 
+    const textFormula = document.createTextNode(row.formula)
+    textFormula.className = "form-scrollable"
+    cell3.appendChild(textFormula); 
+    
 
     // Annotation goes into a hidden span
     const formulaSpan = document.createElement('span');
@@ -66,7 +69,6 @@ function createExpandButton(hiddenSpan) {
     const btn = document.createElement('button');
     btn.className = 'expand-button';
     btn.textContent = '⌄';
-    btn.style.marginLeft = '8px';
     
     let isExpanded = false;
 
@@ -83,17 +85,24 @@ function createExpandButton(hiddenSpan) {
     return btn;
 }
 
+function createHelpButton(headerName) {
+    const btn = document.getElementById(`${headerName}-help-button`)
+}
+
 async function initializeTable() {
+
     const statsDict = await getData();
 
     if (statsDict && Array.isArray(statsDict)) {
-        let statsTable = document.getElementById("main-table");
+        let statsTable = document.querySelector("#main-table tbody");
 
         statsDict.forEach(row => addRow(row, statsTable));
 
         if (window.MathJax?.typesetPromise) {
             MathJax.typesetPromise([statsTable]).catch(err => console.error(err));
         }
+
+        
     }
 }
 
@@ -105,10 +114,10 @@ function liveSearch(text) {
 
     for (let i = 1; i < table.rows.length; i++) {
         let row = table.rows[i];
-        let rowtext;
+        let rowText;
 
         if (row.cells[0]) {
-            rowText = row.cells[0].textContent.toLowerCase();
+            rowText = row.cells[0].textContent.toLowerCase(6);
         } else { 
             continue; 
         }
@@ -123,17 +132,41 @@ function liveSearch(text) {
 
 function toggleSearchHelpBox() {
     const helpPopup = document.getElementById("search-help-box");
-    isDisplayed = helpPopup.style.display == "block";
+    let isDisplayed = helpPopup.style.display == "block";
     helpPopup.style.display = isDisplayed ? "none": "block";
 }
 
+function eventHelpHandle(headerName) {
+    const headerButton = document.getElementById(`${headerName.toLowerCase()}-help-button`);
+    const headerPopup = document.getElementById(`${headerName.toLowerCase()}-help-box`)
+
+    headerButton.addEventListener('click', () => {
+        let isDisplayed = headerPopup.style.display == "block";
+        headerPopup.style.display = isDisplayed ? "none": "block";
+    });
+
+}
+
+// Initialization and event handling
+
 initializeTable();
+
 const searchInputEL = document.getElementById("search-input");
 
-searchInputEL.addEventListener('input', (event) => {
-    liveSearch(event.target.value);
-});
+if (searchInputEL) {
+    searchInputEL.addEventListener('input', (event) => {
+        liveSearch(event.target.value);
+    });
+}
 
-const searchHelpButton = document.getElementById("search-guide");
+const searchHelpButton = document.getElementById("search-help-button");
 
-searchHelpButton.addEventListener("click", toggleSearchHelpBox);
+if (searchHelpButton) { 
+    searchHelpButton.addEventListener("click", toggleSearchHelpBox); 
+}
+
+let statsTable = document.getElementById("main-table");
+
+for (const header of statsTable.rows[0].cells) {
+  eventHelpHandle(header.firstChild.textContent.trim());
+}

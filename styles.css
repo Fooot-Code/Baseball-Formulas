@@ -108,7 +108,7 @@ a:hover {
 
 #search-input {
     flex: 1;
-    min-width: 250px;
+    min-width: 15.625rem;
 
     background-color: var(--bg);
     color: var(--text);
@@ -136,7 +136,7 @@ a:hover {
    SEARCH HELP BUTTON
 ========================= */
 
-#search-guide {
+.help-button, .header-help-button {
     background-color: var(--mlb-navy);
     color: white;
 
@@ -144,6 +144,7 @@ a:hover {
     border-radius: 6px;
 
     padding: 0.6rem 0.9rem;
+    margin-left: 0.5rem;
 
     cursor: pointer;
 
@@ -154,11 +155,29 @@ a:hover {
         transform 0.15s ease;
 }
 
-#search-guide:hover {
+.help-button:hover {
     background-color: var(--mlb-red);
 }
 
-#search-guide:active {
+.help-button:active {
+    transform: scale(0.95);
+}
+
+/* Specialized colors for header help boxes */
+.header-help-button {
+
+    border: 1px solid var(--mlb-red);
+    border-radius: 5px;
+}
+.header-help-button:hover {
+    background-color: var(--mlb-red);
+
+    border: 1px solid var(--mlb-red);
+    border-radius: 5px;
+    border-color: var(--mlb-red);
+}
+
+.help-button:active {
     transform: scale(0.95);
 }
 
@@ -166,7 +185,48 @@ a:hover {
    SEARCH HELP POPUP
 ========================= */
 
-#search-help-box {
+.help-box {
+    position: absolute;
+
+    top: calc(100% + 10px);
+    left: 0;
+
+    width: 20rem;
+
+    background-color: var(--surface-hover);
+
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--mlb-red);
+
+    border-radius: 10px;
+
+    padding: 1rem;
+
+    display: none;
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4);
+
+    z-index: 100;
+}
+
+.help-box ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.help-box p {
+    margin: 0;
+    font-weight: normal;
+}
+
+
+
+/* =========================
+   HEADER HELP POPUP
+========================= */
+
+#header-help-box {
     position: absolute;
 
     top: calc(100% + 10px);
@@ -191,11 +251,6 @@ a:hover {
     z-index: 100;
 }
 
-#search-help-box ul {
-    margin: 0;
-    padding-left: 1.25rem;
-}
-
 /* =========================
    TABLE CONTAINER
 ========================= */
@@ -216,6 +271,10 @@ a:hover {
 /* =========================
    TABLE
 ========================= */
+
+th {
+    position: relative;
+}
 
 #main-table {
     width: 100%;
@@ -251,31 +310,35 @@ a:hover {
 
 /* Header Row */
 
-#main-table tr:first-child {
+#main-table thead tr {
     background-color: var(--mlb-navy);
-
     color: white;
-
     font-weight: bold;
 }
 
 /* Zebra Striping */
 
-#main-table tr:nth-child(even):not(:first-child) {
+#main-table tbody tr:nth-child(even) {
     background-color: rgba(255, 255, 255, 0.02);
 }
 
 /* Hover Effect */
 
-#main-table tr:not(:first-child) {
+#main-table tbody tr {
     transition:
         background-color 0.15s ease,
         transform 0.15s ease;
 }
 
-#main-table tr:hover:not(:first-child) {
+#main-table tbody tr:hover {
     background-color: var(--surface-hover);
 }
+
+/* Formula scroll effect */
+.form-scrollable {
+    white-space: nowrap;
+    overflow-x: auto;
+} 
 
 /* =========================
    EXPAND BUTTONS
@@ -295,6 +358,8 @@ a:hover {
     font-weight: bold;
 
     padding: 2px 8px;
+
+    margin-left: 0.5rem;
 
     transition:
         background-color 0.2s ease,
